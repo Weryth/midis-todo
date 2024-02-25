@@ -70,9 +70,21 @@ export class TodoService {
 
   async GetUser(vkId: string) {
     try {
-      return this.prismaService.user.findFirst({ where: { vkId: vkId } });
+      return await this.prismaService.user.findFirst({ where: { vkId: vkId } });
     } catch (error) {
       throw new HttpException('user nod exist', HttpStatus.NOT_FOUND);
+    }
+  }
+
+  async UserController(vkId: string){
+    try {
+        const existUser = await this.GetUser(vkId)
+        if (!existUser) {
+            return await this.CreateUser(vkId)
+        }
+        return existUser
+    } catch (error) {
+        
     }
   }
 }

@@ -50,4 +50,9 @@ export class TodoController {
   async GetUserByVkID(@Param('id') id: string) {
     return this.todoService.GetUser(id);
   }
+
+  @Post('user/controll')
+  async UserControllController(@Body() data: CreateUserDTO){
+    return this.todoService.UserController(data.vkId)
+  }
 }
