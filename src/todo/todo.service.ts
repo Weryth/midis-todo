@@ -7,13 +7,15 @@ import { UpdateToDoDTO } from './dto/update.todo.dto';
 export class TodoService {
   constructor(private readonly prismaService: PrismaService) {}
 
-  async CreateUser(viId: string){
+  async CreateUser(viId: string) {
     try {
-        return this.prismaService.user.create({data:{
-            vkId: viId
-        }})
+      return this.prismaService.user.create({
+        data: {
+          vkId: viId,
+        },
+      });
     } catch (error) {
-        throw new HttpException(error.message, HttpStatus.CONFLICT)
+      throw new HttpException(error.message, HttpStatus.CONFLICT);
     }
   }
 
@@ -64,5 +66,13 @@ export class TodoService {
         return this.prismaService.toDo.findMany({ where: { userId: userId } });
       }
     } catch (error) {}
+  }
+
+  async GetUser(vkId: string) {
+    try {
+      return this.prismaService.user.findFirst({ where: { vkId: vkId } });
+    } catch (error) {
+      throw new HttpException('user nod exist', HttpStatus.NOT_FOUND);
+    }
   }
 }

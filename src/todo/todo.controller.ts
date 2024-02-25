@@ -12,6 +12,7 @@ import { TodoService } from './todo.service';
 import { CreateToDoDTO } from './dto/create.todo.dto';
 import { UpdateToDoDTO } from './dto/update.todo.dto';
 import { CreateUserDTO } from './dto/create.user.dto';
+import { User } from '@prisma/client';
 
 @Controller('todo')
 export class TodoController {
@@ -43,5 +44,10 @@ export class TodoController {
     @Query('todoid') todoId?: string,
   ) {
     return this.todoService.GetOneTodoOrAll(id, todoId);
+  }
+
+  @Get('user/:id')
+  async GetUserByVkID(@Param('id') id: string) {
+    return this.todoService.GetUser(id);
   }
 }
