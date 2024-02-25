@@ -9,7 +9,7 @@ export class TodoService {
 
   async CreateUser(viId: string) {
     try {
-      return this.prismaService.user.create({
+      return await this.prismaService.user.create({
         data: {
           vkId: viId,
         },
