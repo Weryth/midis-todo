@@ -11,10 +11,16 @@ import {
 import { TodoService } from './todo.service';
 import { CreateToDoDTO } from './dto/create.todo.dto';
 import { UpdateToDoDTO } from './dto/update.todo.dto';
+import { CreateUserDTO } from './dto/create.user.dto';
 
 @Controller('todo')
 export class TodoController {
   constructor(private readonly todoService: TodoService) {}
+
+  @Post('create/user')
+  async CreateUserController(@Body() data: CreateUserDTO) {
+    return this.todoService.CreateUser(data.vkId);
+  }
 
   @Post('create')
   async CreateToDoController(@Body() data: CreateToDoDTO) {

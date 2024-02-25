@@ -7,6 +7,16 @@ import { UpdateToDoDTO } from './dto/update.todo.dto';
 export class TodoService {
   constructor(private readonly prismaService: PrismaService) {}
 
+  async CreateUser(viId: string){
+    try {
+        return this.prismaService.user.create({data:{
+            vkId: viId
+        }})
+    } catch (error) {
+        throw new HttpException(error.message, HttpStatus.CONFLICT)
+    }
+  }
+
   async CreateToDo(data: CreateToDoDTO) {
     try {
       return await this.prismaService.toDo.create({
