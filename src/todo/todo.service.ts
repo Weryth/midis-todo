@@ -5,20 +5,11 @@ import { UpdateToDoDTO } from './dto/update.todo.dto';
 
 @Injectable()
 export class TodoService {
+
+  //Подключаем к нашему сервису prismaService
   constructor(private readonly prismaService: PrismaService) {}
 
-  async CreateUser(viId: string) {
-    try {
-      return await this.prismaService.user.create({
-        data: {
-          vkId: viId,
-        },
-      });
-    } catch (error) {
-      throw new HttpException(error.message, HttpStatus.CONFLICT);
-    }
-  }
-
+  //Здесь находится вся логика с ToDo карточками
   async CreateToDo(data: CreateToDoDTO) {
     try {
       return await this.prismaService.toDo.create({
@@ -68,6 +59,8 @@ export class TodoService {
     } catch (error) {}
   }
 
+  //Работа с пользователем, это, по-хорошему, перенести вообще в другой модуль
+
   async GetUser(vkId: string) {
     try {
       return await this.prismaService.user.findFirst({ where: { vkId: vkId } });
@@ -76,15 +69,26 @@ export class TodoService {
     }
   }
 
-  async UserController(vkId: string){
+  async CreateUser(viId: string) {
     try {
-        const existUser = await this.GetUser(vkId)
-        if (!existUser) {
-            return await this.CreateUser(vkId)
-        }
-        return existUser
+      return await this.prismaService.user.create({
+        data: {
+          vkId: viId,
+        },
+      });
     } catch (error) {
-        
+      throw new HttpException(error.message, HttpStatus.CONFLICT);
     }
+  }
+
+  //Основной контроллер, скажем так, регистрации, мы создаем запись в нашей бд если юзера в ней нет, если есть, просто возвращаем его данные
+  async UserController(vkId: string) {
+    try {
+      const existUser = await this.GetUser(vkId);
+      if (!existUser) {
+        return await this.CreateUser(vkId);
+      }
+      return existUser;
+    } catch (error) {}
   }
 }
